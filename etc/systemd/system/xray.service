@@ -1,13 +1,17 @@
 [Unit]
 After=network-online.target
 Wants=network-online.target
+StartLimitIntervalSec=32
+StartLimitBurst=1
 
 [Service]
 Type=simple
 ExecStart=xray run -c config.json
 AmbientCapabilities=CAP_NET_BIND_SERVICE
 CapabilityBoundingSet=CAP_NET_BIND_SERVICE
-Restart=no
+Restart=on-failure
+RestartSec=8
+RuntimeMaxSec=28800
 
 [Install]
 WantedBy=multi-user.target
