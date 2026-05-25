@@ -1,6 +1,7 @@
 /*
 !/etc
 !/src
+!/usr
 !.gitignore
 !assemble.sh
 !LICENSE
