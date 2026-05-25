@@ -1,8 +1,6 @@
 #!/usr/local/bin/bash
 
-XRAY_CONFIG='/usr/local/etc/config.json'
-
-rm "${XRAY_CONFIG}"
+XRAY_CONFIG='/usr/local/etc/xray-config.json'
 
 LOGLEVEL='warning'
 
@@ -68,3 +66,5 @@ MESSAGE="{
 }"
 
 printf "${MESSAGE}" > "${XRAY_CONFIG}"
+if test $? -ne 0; then
+ echo 'Write config error!' >&2; exit 1; fi
