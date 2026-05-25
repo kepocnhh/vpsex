@@ -1,6 +1,6 @@
 #!/usr/local/bin/bash
 
-if test $# -ne 1; then
+if test $# -ne 2; then
  echo 'Wrong arguments!'; exit 1; fi
 
 SERVICE_NAME="$1"

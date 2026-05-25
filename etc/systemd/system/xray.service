@@ -6,7 +6,7 @@ StartLimitBurst=1
 
 [Service]
 Type=simple
-ExecStart=xray run -c config.json
+ExecStart=/usr/local/bin/xray run -c /usr/local/etc/config.json
 AmbientCapabilities=CAP_NET_BIND_SERVICE
 CapabilityBoundingSet=CAP_NET_BIND_SERVICE
 Restart=on-failure
