@@ -5,8 +5,7 @@ After=network.target dbus.socket
 Type=simple
 Environment="TG_BOT_ID=?"
 Environment="TG_BOT_TOKEN=?"
-Environment="TG_CHAT_ID=?"
-ExecStart=/usr/local/bin/service_monitor.sh %I
+ExecStart=/usr/local/bin/service_monitor.sh %I "${TG_CHAT_ID}"
 
 [Install]
 WantedBy=multi-user.target
