@@ -1,19 +1,19 @@
 #!/usr/local/bin/bash
 
-if test $# -ne 2; then
- echo 'Wrong arguments!'; exit 1; fi
+if [[ $# -ne 2 ]]; then
+ echo 'Wrong arguments!' >&2; exit 1; fi
 
 SERVICE_NAME="$1"
-TG_CHAT_ID="$2"
+TGBOTS_CHAT_ID="$2"
 
-if test -z "${SERVICE_NAME}"; then
- echo "Service name \"${SERVICE_NAME}\" is empty!"; exit 1; fi
+if [[ -z "${SERVICE_NAME}" ]]; then
+ echo "Service name \"${SERVICE_NAME}\" is empty!" >&2; exit 1; fi
 
 if [[ ! "${TG_CHAT_ID}" =~ ^-?[1-9][0-9]*$ ]]; then
- echo 'Wrong chat id!'; exit 1; fi
+ echo 'Wrong chat id!' >&2; exit 1; fi
 
 if [[ ! -s "/etc/systemd/system/${SERVICE_NAME}.service" ]]; then
- echo "No service \"${SERVICE_NAME}\"!"; exit 1; fi
+ echo "No service \"${SERVICE_NAME}\"!" >&2; exit 1; fi
 
 SENDER_NAME='org.freedesktop.systemd1'
 SENDER_TYPE='signal'
@@ -60,11 +60,13 @@ while read -r json; do
   ACTIVE_STATE="$(echo "${json}" | yq -e '.payload.data[1].ActiveState.data // ""' 2>/dev/null)"
   [[ -n "${ACTIVE_STATE}" && "${LAST_ACTIVE_STATE}" != "${ACTIVE_STATE}" ]] && LAST_ACTIVE_STATE="${ACTIVE_STATE}"
  else continue; fi
- MESSAGE="
+ TGBOTS_MESSAGE="
 UTC: \`${DATE_TIME}\`
 IP: \`${IP_ADDRESS}\`
 Service: \`${SERVICE_NAME}\`
 ActiveState: \`${LAST_ACTIVE_STATE}\`
 SubState: \`${LAST_SUB_STATE}\`"
- /usr/local/bin/tgbots/send_message.sh "${MESSAGE}" "${TG_CHAT_ID}" &
+ TGBOTS_DST="$(mktemp)"
+ rm "${TGBOTS_DST}"
+ /usr/local/bin/tgbots/send_message.sh "${TGBOTS_BOT_ID}" "${TGBOTS_BOT_SECRET}" "${TGBOTS_CHAT_ID}" "${TGBOTS_MESSAGE}" "${TGBOTS_DST}" &
 done < <(stdbuf -oL busctl monitor "${SENDER_NAME}" --match="${SENDER_MATCHER}" --json=short)
