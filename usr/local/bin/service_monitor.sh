@@ -9,7 +9,7 @@ TGBOTS_CHAT_ID="$2"
 if [[ -z "${SERVICE_NAME}" ]]; then
  echo "Service name \"${SERVICE_NAME}\" is empty!" >&2; exit 1; fi
 
-if [[ ! "${TG_CHAT_ID}" =~ ^-?[1-9][0-9]*$ ]]; then
+if [[ ! "${TGBOTS_CHAT_ID}" =~ ^-?[1-9][0-9]*$ ]]; then
  echo 'Wrong chat id!' >&2; exit 1; fi
 
 if [[ ! -s "/etc/systemd/system/${SERVICE_NAME}.service" ]]; then
