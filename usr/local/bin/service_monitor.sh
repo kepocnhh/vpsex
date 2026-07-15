@@ -66,7 +66,6 @@ IP: \`${IP_ADDRESS}\`
 Service: \`${SERVICE_NAME}\`
 ActiveState: \`${LAST_ACTIVE_STATE}\`
 SubState: \`${LAST_SUB_STATE}\`"
- TGBOTS_DST="$(mktemp)"
- rm "${TGBOTS_DST}"
- /usr/local/bin/tgbots/send_message.sh "${TGBOTS_BOT_ID}" "${TGBOTS_BOT_SECRET}" "${TGBOTS_CHAT_ID}" "${TGBOTS_MESSAGE}" "${TGBOTS_DST}" &
+ TGBOTS_DST="$(mktemp)"; rm "${TGBOTS_DST}"
+ (/usr/local/bin/tgbots/send_message.sh "${TGBOTS_BOT_ID}" "${TGBOTS_BOT_SECRET}" "${TGBOTS_CHAT_ID}" "${TGBOTS_MESSAGE}" "${TGBOTS_DST}"; rm "${TGBOTS_DST}") &
 done < <(stdbuf -oL busctl monitor "${SENDER_NAME}" --match="${SENDER_MATCHER}" --json=short)
