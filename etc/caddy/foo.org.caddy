@@ -1,0 +1,18 @@
+foo.org, www.foo.org {
+    root * /var/www/foo.org
+
+    @allowed {
+        path /
+        path /index.html
+        path /src/*
+    }
+
+    handle @allowed {
+        encode gzip
+        file_server
+    }
+
+    handle {
+        respond 404
+    }
+}
