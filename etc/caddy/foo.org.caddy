@@ -15,4 +15,10 @@ foo.org, www.foo.org {
     handle {
         respond 404
     }
+
+    reverse_proxy /${GRPC_SECRET}/* 127.0.0.1:10001 {
+        transport http {
+            versions h2c
+        }
+    }
 }
