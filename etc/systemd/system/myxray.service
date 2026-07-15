@@ -6,9 +6,9 @@ StartLimitBurst=512
 
 [Service]
 Type=simple
+User=nobody
+Group=xray
 ExecStart=/usr/local/bin/xray run -c /usr/local/etc/xray/config.json
-AmbientCapabilities=CAP_NET_BIND_SERVICE
-CapabilityBoundingSet=CAP_NET_BIND_SERVICE
 Restart=on-failure
 RestartSec=32
 RuntimeMaxSec=28800
