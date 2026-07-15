@@ -7,6 +7,14 @@ foo.org, www.foo.org {
         path /src/*
     }
 
+    handle /${GRPC_SECRET}/* {
+        reverse_proxy 127.0.0.1:10001 {
+            transport http {
+                versions h2c
+            }
+        }
+    }
+
     handle @allowed {
         encode gzip
         file_server
@@ -14,11 +22,5 @@ foo.org, www.foo.org {
 
     handle {
         respond 404
-    }
-
-    reverse_proxy /${GRPC_SECRET}/* 127.0.0.1:10001 {
-        transport http {
-            versions h2c
-        }
     }
 }
