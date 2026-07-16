@@ -1,0 +1,21 @@
+[Unit]
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=28800
+StartLimitBurst=512
+
+[Service]
+Type=simple
+User=nobody
+Group=xray
+Environment="GRPC_SECRET=?"
+Environment="USER_ID_01=?"
+ExecStartPre=/usr/local/bin/xray_config_grpc.sh /tmp/config.json GRPC_SECRET "${USER_ID_01}"
+ExecStart=/usr/local/bin/xray run -c /tmp/config.json
+PrivateTmp=true
+Restart=on-failure
+RestartSec=32
+RuntimeMaxSec=28800
+
+[Install]
+WantedBy=multi-user.target

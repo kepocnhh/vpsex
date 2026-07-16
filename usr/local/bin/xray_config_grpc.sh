@@ -17,10 +17,10 @@ elif [[ -e "${XRAY_CONFIG_PATH}" ]]; then
  fi
 fi
 
-XRAY_CONFIG_SERVICE_NAME="$2"
+XRAY_CONFIG_SERVICE_NAME_SRC="$2"
 
-if [[ -z "${XRAY_CONFIG_SERVICE_NAME}" ]]; then
- echo 'No service name!' >&2; exit 1; fi
+if [[ -z "${XRAY_CONFIG_SERVICE_NAME_SRC}" || ! -v "${XRAY_CONFIG_SERVICE_NAME_SRC}" || -z "${!XRAY_CONFIG_SERVICE_NAME_SRC}" ]]; then
+ echo 'Wrong service name!' >&2; exit 1; fi
 
 XRAY_CONFIG_LOGLEVEL='warning' # todo
 XRAY_CONFIG_OUTBOUND_PROTOCOL='freedom'
@@ -38,8 +38,7 @@ XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq ".inbounds[0].port=${
 XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq ".inbounds[0].protocol=\"${XRAY_CONFIG_INBOUND_PROTOCOL}\"")"
 XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq ".inbounds[0].streamSettings.network=\"grpc\"")"
 XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq ".inbounds[0].streamSettings.security=\"none\"")"
-XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq ".inbounds[0].streamSettings.grpcSettings.serviceName=\"${XRAY_CONFIG_SERVICE_NAME}\"")"
-XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq ".inbounds[0].settings.decryption=\"none\"")"
+XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq ".inbounds[0].streamSettings.grpcSettings.serviceName=\"${!XRAY_CONFIG_SERVICE_NAME_SRC}\"")"
 XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq ".inbounds[0].settings.decryption=\"none\"")"
 
 for ((i=3; i<=$#; i++)); do
