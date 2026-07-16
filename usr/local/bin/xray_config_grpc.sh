@@ -30,20 +30,20 @@ XRAY_CONFIG_INBOUND_PORT='10001'
 XRAY_CONFIG_INBOUND_PROTOCOL='vless'
 
 XRAY_CONFIG_JSON='{}'
-XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq ".log.loglevel=\"${XRAY_CONFIG_LOGLEVEL}\"")"
-XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq ".outbounds[0].protocol=\"${XRAY_CONFIG_OUTBOUND_PROTOCOL}\"")"
-XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq ".outbounds[0].tag=\"${XRAY_CONFIG_OUTBOUND_TAG}\"")"
-XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq ".inbounds[0].listen=\"${XRAY_CONFIG_INBOUND_LISTEN}\"")"
-XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq ".inbounds[0].port=${XRAY_CONFIG_INBOUND_PORT}")"
-XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq ".inbounds[0].protocol=\"${XRAY_CONFIG_INBOUND_PROTOCOL}\"")"
-XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq ".inbounds[0].streamSettings.network=\"grpc\"")"
-XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq ".inbounds[0].streamSettings.security=\"none\"")"
-XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq ".inbounds[0].streamSettings.grpcSettings.serviceName=\"${!XRAY_CONFIG_SERVICE_NAME_SRC}\"")"
-XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq ".inbounds[0].settings.decryption=\"none\"")"
+XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq -p=json -o=json ".log.loglevel=\"${XRAY_CONFIG_LOGLEVEL}\"")"
+XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq -p=json -o=json ".outbounds[0].protocol=\"${XRAY_CONFIG_OUTBOUND_PROTOCOL}\"")"
+XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq -p=json -o=json ".outbounds[0].tag=\"${XRAY_CONFIG_OUTBOUND_TAG}\"")"
+XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq -p=json -o=json ".inbounds[0].listen=\"${XRAY_CONFIG_INBOUND_LISTEN}\"")"
+XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq -p=json -o=json ".inbounds[0].port=${XRAY_CONFIG_INBOUND_PORT}")"
+XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq -p=json -o=json ".inbounds[0].protocol=\"${XRAY_CONFIG_INBOUND_PROTOCOL}\"")"
+XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq -p=json -o=json ".inbounds[0].streamSettings.network=\"grpc\"")"
+XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq -p=json -o=json ".inbounds[0].streamSettings.security=\"none\"")"
+XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq -p=json -o=json ".inbounds[0].streamSettings.grpcSettings.serviceName=\"${!XRAY_CONFIG_SERVICE_NAME_SRC}\"")"
+XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq -p=json -o=json ".inbounds[0].settings.decryption=\"none\"")"
 
 for ((i=3; i<=$#; i++)); do
- XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq ".inbounds[0].settings.clients[$((i-3))}].id=\"${!i}\"")"
- XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq ".inbounds[0].settings.clients[$((i-3))}].email=\"u$((i-2))\"")"
+ XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq -p=json -o=json ".inbounds[0].settings.clients[$((i-3))].id=\"${!i}\"")"
+ XRAY_CONFIG_JSON="$(printf '%s' "${XRAY_CONFIG_JSON}" | yq -p=json -o=json ".inbounds[0].settings.clients[$((i-3))].email=\"u$((i-2))\"")"
 done
 
 printf '%s' "${XRAY_CONFIG_JSON}" > "${XRAY_CONFIG_PATH}"
