@@ -8,6 +8,7 @@ StartLimitBurst=512
 Type=notify
 User=caddy
 Group=caddy
+Environment="GRPC_SECRET=?"
 ExecStart=/usr/bin/caddy run --config /etc/caddy/Caddyfile
 TimeoutStopSec=8
 LimitNOFILE=1048576

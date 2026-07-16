@@ -2,7 +2,7 @@ foo.org, www.foo.org {
     root * /var/www/foo.org
 
     @is_grpc {
-        path /{env.GRPC_SECRET}/*
+        path /{$GRPC_SECRET}/*
         protocol grpc
     }
 
