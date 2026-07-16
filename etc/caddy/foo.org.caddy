@@ -1,18 +1,23 @@
 foo.org, www.foo.org {
     root * /var/www/foo.org
 
-    @allowed {
-        path /
-        path /index.html
-        path /src/*
+    @is_grpc {
+        path /{env.GRPC_SECRET}/*
+        protocol grpc
     }
 
-    handle /${GRPC_SECRET}/* {
+    handle @is_grpc {
         reverse_proxy 127.0.0.1:10001 {
             transport http {
                 versions h2c
             }
         }
+    }
+
+    @allowed {
+        path /
+        path /index.html
+        path /src/*
     }
 
     handle @allowed {
